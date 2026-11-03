@@ -77,13 +77,14 @@
 		<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=5">
 	<?php } ?>
 	<meta property="og:site_name" content="<?php echo get_bloginfo('name');?>">
+	<meta property="og:image" content="<?php echo argon_get_post_thumbnail();?>"/>
 	<meta property="og:title" content="<?php echo wp_get_document_title();?>">
 	<meta property="og:type" content="article">
 	<meta property="og:url" content="<?php echo home_url(add_query_arg(array(),$wp->request));?>">
 	<?php
 		$seo_description = get_seo_description();
 		if ($seo_description != ''){ ?>
-			<meta name="description" content="<?php echo $seo_description?>">
+			<meta name="description" itemprop="description" content="<?php echo $seo_description?>">
 			<meta property="og:description" content="<?php echo $seo_description?>">
 	<?php } ?>
 
@@ -285,7 +286,7 @@
 				<div class="navbar-brand mr-0">
 					<?php if (get_option('argon_toolbar_icon') != '') { /*顶栏ICON(如果选项中开启)*/?>
 						<a class="navbar-brand navbar-icon mr-lg-5" href="<?php echo get_option('argon_toolbar_icon_link'); ?>">
-							<img src="<?php echo get_option('argon_toolbar_icon'); ?>">
+							<img src="<?php echo get_option('argon_toolbar_icon'); ?>" alt="<?php echo get_option('argon_toolbar_icon_alt'); ?>">
 						</a>
 					<?php }?>
 					<?php
@@ -421,11 +422,31 @@
 	?>
 	<div id="banner_container" class="banner-container container text-center">
 		<?php if ($enable_banner_title_typing_effect != "true"){?>
-			<div class="banner-title text-white"><span class="banner-title-inner"><?php echo apply_filters('argon_banner_title_html', $banner_title); ?></span>
-			<?php echo get_option('argon_banner_subtitle') == '' ? '' : '<span class="banner-subtitle d-block">' . get_option('argon_banner_subtitle') . '</span>'; ?></div>
+			<div class="banner-title text-white">
+			<span class="banner-title-inner">
+                <?php if (strpos($banner_title, '/') !== false) : ?>
+    			<!-- 标题中含有 / 标签 -->
+                    <?php echo '<img src=' . $banner_title . ' alt="Not - Body" height="120" >'; 
+    			 else : ?>
+    			<!-- 标题标签为空 或 不含 / 标签 -->
+    				<?php echo apply_filters('argon_banner_title_html', $banner_title); 
+                 endif; ?>
+            </span>
+			<!-- 副标题 -->
+			<?php echo get_option('argon_banner_subtitle') == '' ? '' : '<span class="banner-subtitle d-block">' . get_option('argon_banner_subtitle') . '</span>'; ?>
+			</div>
 		<?php } else {?>
-			<div class="banner-title text-white" data-interval="<?php echo get_option('argon_banner_typing_effect_interval', 100); ?>"><span data-text="<?php echo $banner_title; ?>" class="banner-title-inner">&nbsp;</span>
-			<?php echo get_option('argon_banner_subtitle') == '' ? '' : '<span data-text="' . get_option('argon_banner_subtitle') . '" class="banner-subtitle d-block">&nbsp;</span>'; ?></div>
+		    <div class="banner-title text-white" data-interval="<?php echo get_option('argon_banner_typing_effect_interval', 100); ?>">
+            <?php if (strpos($banner_title, '/') !== false) : ?>
+            <!-- 标题中含有 / 标签 -->
+                <span data-text="" class="banner-title-inner"><img src="<?php echo esc_url(site_url($banner_title)) .'?'. time(); ?>" alt="Not - Body" height="86" />
+			<?php else : ?>
+			<!-- 标题标签为空 或 不含 / 标签 -->
+    			<span data-text="<?php echo $banner_title; ?>" class="banner-title-inner">&nbsp;
+			<?php endif; ?>
+			</span>
+			<?php echo get_option('argon_banner_subtitle') == '' ? '' : '<span data-text="' . get_option('argon_banner_subtitle') . '" class="banner-subtitle d-block">&nbsp;</span>'; ?>
+			</div>
 		<?php }?>
 	</div>
 	<?php if (get_option('argon_banner_background_url') != '') { ?>

@@ -1,6 +1,6 @@
 <div id="share_container">
 	<div id="share" data-initialized="true">
-			<?php if (get_option('argon_show_sharebtn') != 'abroad') { ?>
+		<?php if (get_option('argon_show_sharebtn') != 'abroad') { ?>
 			<a class="no-pjax icon-wechat" tooltip="<?php _e('分享到微信', 'argon'); ?>">
 				<button class="btn btn-icon btn-success">
 					<span class="btn-inner--icon"><i class="fa fa-weixin"></i></span>
@@ -27,23 +27,28 @@
 				</button>
 			</a>
 		<?php } if (get_option('argon_show_sharebtn') != 'domestic') { ?>
-		<a target="_blank" class="no-pjax icon-facebook" tooltip="<?php _e('分享到 Facebook', 'argon'); ?>">
-			<button class="btn btn-icon btn-primary" style="background: #283593;border: none;">
-				<span class="btn-inner--icon"><i class="fa fa-facebook"></i></span>
-			</button>
-		</a>
-		<a target="_blank" class="no-pjax icon-twitter" tooltip="<?php _e('分享到 Twitter', 'argon'); ?>">
-			<button class="btn btn-icon btn-primary" style="background: #03a9f4;border: none;">
-				<span class="btn-inner--icon"><i class="fa fa-twitter"></i></span>
-			</button>
-		</a>
-		<a target="_blank" class="no-pjax icon-telegram" href="https://telegram.me/share/url?url=<?php echo urlencode(
-$_SERVER['HTTP_HOST']);?>&text=<?php echo urlencode(html_entity_decode(get_the_title()));?>" tooltip="<?php _e('分享到 Telegram', 'argon'); ?>">
-			<button class="btn btn-icon btn-primary" style="background: #42a5f5;border: none;">
-				<span class="btn-inner--icon"><i class="fa fa-telegram"></i></span>
-			</button>
-		</a>
+    		<a target="_blank" class="no-pjax icon-facebook" tooltip="<?php _e('分享到 Facebook', 'argon'); ?>">
+    			<button class="btn btn-icon btn-primary" style="background: #283593;border: none;">
+    				<span class="btn-inner--icon"><i class="fa fa-facebook"></i></span>
+    			</button>
+    		</a>
+    		<a target="_blank" class="no-pjax icon-twitter" tooltip="<?php _e('分享到 Twitter', 'argon'); ?>">
+    			<button class="btn btn-icon btn-primary" style="background: #03a9f4;border: none;">
+    				<span class="btn-inner--icon"><i class="fa fa-twitter"></i></span>
+    			</button>
+    		</a>
+    		<a target="_blank" class="no-pjax icon-telegram" href="https://telegram.me/share/url?url=<?php echo urlencode(
+    $_SERVER['HTTP_HOST']);?>&text=<?php echo urlencode(html_entity_decode(get_the_title()));?>" tooltip="<?php _e('分享到 Telegram', 'argon'); ?>">
+    			<button class="btn btn-icon btn-primary" style="background: #42a5f5;border: none;">
+    				<span class="btn-inner--icon"><i class="fa fa-telegram"></i></span>
+    			</button>
+    		</a>
 		<?php } ?>
+		<a target="_blank" class="no-pjax icon-short-link" id="share_short_link" tooltip="<?php _e('复制短链', 'argon'); ?>">
+			<button class="btn btn-icon btn-default" style="background: #7f7ee0;border: none;">
+				<span class="btn-inner--icon"><i class="fa fa-share-alt"></i></span>
+			</button>
+		</a>
 		<a target="_blank" class="no-pjax icon-copy-link" id="share_copy_link" tooltip="<?php _e('复制链接', 'argon'); ?>">
 			<button class="btn btn-icon btn-default">
 				<span class="btn-inner--icon"><i class="fa fa-link"></i></span>
@@ -61,6 +66,8 @@ $_SERVER['HTTP_HOST']);?>&text=<?php echo urlencode(html_entity_decode(get_the_t
 	    wechatQrcodeTitle : "<?php _e('分享到微信', 'argon');?>",
 	    wechatQrcodeHelper : '<?php _e('微信扫描二维码', 'argon');?>',
 	    source : '<?php global $post; echo get_permalink($post -> ID); ?>'
+        // source: '<--?php global $post; echo esc_url(get_permalink($post->ID)); ?>' // 动态链接（需转义）
+	   // source : window.location.href
 	});
 	$("#share_show")[0].onclick = function(){
 		$("#share_container").addClass("opened");
@@ -103,4 +110,54 @@ $_SERVER['HTTP_HOST']);?>&text=<?php echo urlencode(html_entity_decode(get_the_t
 		}
 		document.body.removeChild(input);
 	};
+	$("#share_short_link")[0].onclick = async function () {
+    // 生成短链接
+    if (!window.shorturl) {
+        const poop = await fetch('https://s.norc.cn/api.php?url=' + encodeURI(window.location.href)).then(x => x.json());
+        window.shorturl = poop.shorturl ? poop.shorturl : poop.error;
+    }
+
+    // 复制链接到剪贴板
+    let input = document.createElement('input');
+    document.body.appendChild(input);
+    input.setAttribute("value", window.shorturl); // 使用短链接而不是原始链接
+    input.setAttribute("readonly", "readonly");
+    input.setAttribute("style", "opacity: 0; pointer-events:none;");
+    input.select();
+    
+    if (document.execCommand('copy')) {
+        // 显示成功提示
+        iziToast.show({
+            title: '<?php _e('短链接已复制', 'argon');?>',
+            message: "<?php _e('链接已复制到剪贴板', 'argon');?>",
+            class: 'shadow',
+            position: 'topRight',
+            backgroundColor: '#2dce89',
+            titleColor: '#ffffff',
+            messageColor: '#ffffff',
+            iconColor: '#ffffff',
+            progressBarColor: '#ffffff',
+            icon: 'fa fa-check',
+            timeout: 5000
+        });
+    } else {
+        // 显示失败提示
+        iziToast.show({
+            title: '<?php _e('复制失败', 'argon');?>',
+            message: "<?php _e('请前往短链站手动生成链接', 'argon');?>",
+            class: 'shadow',
+            position: 'topRight',
+            backgroundColor: '#f5365c',
+            titleColor: '#ffffff',
+            messageColor: '#ffffff',
+            iconColor: '#ffffff',
+            progressBarColor: '#ffffff',
+            icon: 'fa fa-close',
+            timeout: 5000
+        });
+    }
+
+    // 移除临时输入框
+    document.body.removeChild(input);
+    };
 </script>

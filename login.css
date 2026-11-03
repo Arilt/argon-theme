@@ -1,5 +1,5 @@
 body {
-	background: linear-gradient(150deg,#7795f8 15%,#6772e5 70%,#555abf 94%);
+	background: linear-gradient(150deg,#67a8e5 15%,#5785d2 70%,#456da9 94%);
 }
 .login h1 {
 	display: none;
@@ -7,7 +7,7 @@ body {
 .login form {
 	background-color: #fafafa;
 	border: none;
-	border-radius: .25rem;
+	border-radius: 1.25rem;
 	box-shadow: 0 15px 35px rgba(50,50,93,.1),0 5px 15px rgba(0,0,0,.07)!important;
 	padding: 40px 40px;
 }
@@ -23,7 +23,7 @@ body {
 	color: #8898aa;
 	background-color: #fff;
 	background-clip: padding-box;
-	border-radius: .25rem;
+	border-radius: .75rem;
 	box-shadow: 0 1px 3px rgba(50,50,93,.15), 0 1px 0 rgba(0,0,0,.02);
 	border: 0;
 	transition: box-shadow .15s ease;
@@ -40,9 +40,13 @@ body {
 	font-size: 16px;
 }
 .login .button.wp-hide-pw {
-	color: #5e72e4;
+	color: #67a8e5;
 	height: 100%;
 	border: none;
+}
+.login .button-primary {
+    background-color: #67a8e5 !important;
+    border-radius: 25px;
 }
 input[type=checkbox]:before {
 	content: '' !important;
@@ -68,8 +72,8 @@ input[type=checkbox] {
 }
 input[type=checkbox]:checked:before {
 	color: #fff;
-	border-color: #5e72e4;
-	background-color: #5e72e4;
+	border-color: #67a8e5;
+	background-color: #67a8e5;
 }
 input[type=checkbox]:after {
 	content: '';
@@ -101,7 +105,7 @@ input[type=checkbox] + label {
 	border: none !important;
 }
 .button-primary {
-	background-color: #5e72e4 !important;
+	background-color: #67a8e5 !important;
 }
 .button-primary:active {
 	box-shadow: none !important;
@@ -110,6 +114,10 @@ p.submit {
 	display: block;
 	width: 100%;
 	margin-top: 30px !important;
+}
+.login .language-switcher .button {
+    margin-bottom: 0;
+    border-radius: 25px;
 }
 .login .button-primary {
 	float: none;
@@ -151,4 +159,12 @@ p.submit {
 	letter-spacing: 1px;
 	opacity: .6;
 	text-decoration: none;
+}
+#language-switcher select {
+    border-radius: 25px;
+    color: #2b94df;
+}
+.language-switcher label .dashicons{
+    color: white;
+    vertical-align: middle;
 }

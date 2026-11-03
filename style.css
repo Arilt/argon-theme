@@ -4026,6 +4026,9 @@ body.noscroll:before {
 #share .icon-telegram:before {
 	content: attr(tooltip);
 }
+#share .icon-short-link:before {
+	content: attr(tooltip);
+}
 #share .icon-copy-link:before {
 	content: attr(tooltip);
 }
