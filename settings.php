@@ -357,6 +357,13 @@ function themeoptions_page(){
 						</td>
 					</tr>
 					<tr>
+						<th><label><?php _e('图标替代文本', 'argon');?></label></th>
+						<td>
+							<input type="text" class="regular-text" name="argon_toolbar_icon_alt" value="<?php echo get_option('argon_toolbar_icon_alt'); ?>"/>
+							<p class="description"><?php _e('图片替代文本，用于图标无法加载时展示', 'argon');?></p>
+						</td>
+					</tr>
+					<tr>
 						<th><label><?php _e('图标链接', 'argon');?></label></th>
 						<td>
 							<input type="text" class="regular-text" name="argon_toolbar_icon_link" value="<?php echo get_option('argon_toolbar_icon_link'); ?>"/>
@@ -2118,6 +2125,7 @@ function argon_update_themeoptions(){
 		}
 		//配置项
 		argon_update_option('argon_toolbar_icon');
+		argon_update_option('argon_toolbar_icon_alt');
 		argon_update_option('argon_toolbar_icon_link');
 		argon_update_option('argon_toolbar_title');
 		argon_update_option('argon_sidebar_banner_title');
